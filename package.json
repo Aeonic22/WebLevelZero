@@ -1,0 +1,14 @@
+{
+  "name": "static-site",
+  "version": "1.0.0",
+  "description": "Static website project generated from current folder",
+  "private": true,
+  "scripts": {
+	"start": "npx http-server -c-1 . -p 8080",
+	"serve": "npx serve . -l 8080",
+	"preview": "npx http-server -c-1 . -p 8080"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "MIT"
+}

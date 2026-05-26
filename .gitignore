@@ -1,0 +1,85 @@
+# This .gitignore file should be placed at the root of your Unity project directory
+
+# Unity folders
+/[Bb]uild/
+/[Bb]uilds/
+/[Bb]undle/
+/[Bb]undles/
+/[Ll]ibrary/
+/[Ll]ogs/
+/[Oo]bj/
+/[Tt]emp/
+
+# Dev Tools
+/Assets/_GAMES
+/LibraryBackup/
+/PackagesBackup/
+
+# GitIgnored
+/*[Gg][Ii][Tt][Ii]gnored/
+/Assets/*[Gg][Ii][Tt][Ii]gnored/
+/Assets/*[Gg][Ii][Tt][Ii]gnored.meta
+
+# Addressables custom build path
+/[Ss]erver[Dd]ata/
+
+# Unity folders extra
+/[Mm]emoryCaptures/
+/[Rr]ecordings/
+/[Uu]ser[Ss]ettings/
+
+# Unity plugins
+/ProjectSettings/MaintainerSettings.asset
+
+# Builds
+*.apk
+*.aab
+*.unitypackage
+*.app
+
+# Packed Addressables
+/[Aa]ssets/[Aa]ddressable[Aa]ssets[Dd]ata/*/*.bin*
+
+# Crashlytics generated file
+crashlytics-build.properties
+
+# VS/VScode
+.vs/
+.vscode/
+.vsconfig
+*.booproj
+*.csproj
+*.unityproj
+*.pdb
+*.pdb.meta
+*.pidb
+*.pidb.meta
+*.mdb
+*.mdb.meta
+*.sln
+*.suo
+*.svd
+*.tmp
+*.user
+*.userprefs
+.contextkeeper/
+
+# Jetbrain Rider Cache
+.idea/
+/[Aa]ssets/Plugins/Editor/JetBrains*
+
+# Temporary auto-generated Android Assets
+/[Aa]ssets/[Ss]treamingAssets/aa.meta
+/[Aa]ssets/[Ss]treamingAssets/aa/*
+
+# Gradle cache directory
+.gradle/
+
+# OS generated
+._*
+.DS_Store
+.Spotlight-V100
+.Trashes
+Thumbs.db
+[Dd]esktop.ini
+ehthumbs.db
