@@ -14,25 +14,31 @@
         </div>
     </nav>
 
-    <main class="container mt-5">
+    <main class="container page-main">
         <div class="row">
-            <div class="col-md-8 mx-auto">
+            <div class="col-md-8 mx-auto page-content page-content--scroll">
                 <div class="page-header">
                     <a href="../../index.html" class="back-link">← Back to Home</a>
                     <h1>Todo App</h1>
                 </div>
 
-                <div class="card">
+                <div class="card scroll-card">
                     <div class="card-body">
-                        <div class="input-group mb-3">
-                            <input type="text" id="todoInput" class="form-control" placeholder="Add a new task...">
-                            <button class="btn btn-primary" onclick="addTodo()">Add</button>
+                        <div class="scroll-card__toolbar">
+                            <div class="input-group">
+                                <input type="text" id="todoInput" class="form-control" placeholder="Add a new task...">
+                                <button class="btn btn-primary" onclick="addTodo()">Add</button>
+                            </div>
                         </div>
 
-                        <ul id="todoList" class="list-group">
-                        </ul>
+                        <div class="scroll-card__body">
+                            <ul id="todoList" class="list-group">
+                            </ul>
+                        </div>
 
-                        <button class="btn btn-danger mt-3" onclick="clearCompleted()">Clear Completed</button>
+                        <div class="scroll-card__footer">
+                            <button class="btn btn-danger" onclick="clearCompleted()">Clear Completed</button>
+                        </div>
                     </div>
                 </div>
             </div>

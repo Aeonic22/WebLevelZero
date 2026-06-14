@@ -1,6 +1,17 @@
 /* Custom styles */
+:root {
+    --navbar-height: 56px;
+}
+
+html {
+    height: 100%;
+}
+
 body {
     background-color: #f8f9fa;
+    min-height: 100%;
+    display: flex;
+    flex-direction: column;
 }
 
 .navbar-brand {
@@ -8,9 +19,57 @@ body {
     font-size: 1.5rem;
 }
 
-main {
-    min-height: 100vh;
-    padding-bottom: 2rem;
+.page-main {
+    flex: 1;
+    display: flex;
+    align-items: safe center;
+    min-height: 0;
+    overflow-y: auto;
+    padding: 1.5rem 0;
+}
+
+.page-main > .row {
+    width: 100%;
+}
+
+.page-content {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.page-content--scroll {
+    max-height: calc(100vh - var(--navbar-height) - 3rem);
+}
+
+.scroll-card {
+    flex: 1;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+.scroll-card .card-body {
+    flex: 1;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+.scroll-card__toolbar {
+    flex-shrink: 0;
+}
+
+.scroll-card__body {
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+    margin-top: 0.75rem;
+}
+
+.scroll-card__footer {
+    flex-shrink: 0;
+    margin-top: 0.75rem;
 }
 
 .card {
