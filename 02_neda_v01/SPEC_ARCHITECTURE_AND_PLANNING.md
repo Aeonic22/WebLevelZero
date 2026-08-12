@@ -66,12 +66,26 @@ Message collection/table fields should include at least:
 - message text
 - display name entered by the user
 
+**Note:** All Neda data collections must use the `neda_` prefix to distinguish them from other miniApps' data stores in the shared Firestore.
+
+- Collection name: `neda_messages`
+  - timestamp
+  - deviceId
+  - text
+  - name
+
 Allowed devices collection/table fields should include at least:
 
 - device identifier
 - optional passkey or token
 - optional registration date
 - optional simple device label for internal reference
+
+- Collection name: `neda_allowedDevices`
+  - deviceId
+  - passkey (optional)
+  - label (optional)
+  - createdAt (optional)
 
 ---
 

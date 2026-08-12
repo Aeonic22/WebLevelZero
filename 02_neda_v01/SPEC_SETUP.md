@@ -59,16 +59,16 @@ This file provides the detailed technical checklist for the Firebase setup path.
 
 #### Create the `neda_messages` collection
 
-- [ ] Open **Firestore Database** in your Firebase project
-- [ ] Click **Create collection**
-- [ ] Name it `neda_messages`
-- [ ] For the first document, click **Auto ID**, then click **Save**
+- [x] Open **Firestore Database** in your Firebase project
+- [x] Click **Create collection**
+- [x] Name it `neda_messages`
+- [x] For the first document, click **Auto ID**, then click **Save**
 - [ ] After creation, delete that auto-created document (we'll add real messages from the app later)
 
-#### Create the `allowedDevices` collection
+#### Create the `neda_allowedDevices` collection
 
 - [ ] Click **Create collection** again
-- [ ] Name it `allowedDevices`
+- [ ] Name it `neda_allowedDevices`
 - [ ] Click **Auto ID** for the first document
 - [ ] Add these fields to the document:
   - `deviceId` (string) — see below for how to get the device ID
@@ -85,7 +85,7 @@ The app generates a unique device ID and stores it locally. To find it:
 3. Go to the **Console** tab
 4. Run this command: `localStorage.getItem('neda-device-id')`
 5. Copy the returned value (it will look like `device-xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx`)
-6. Paste that exact value into the `deviceId` field of the `allowedDevices` document
+6. Paste that exact value into the `deviceId` field of the `neda_allowedDevices` document
 
 #### Example allowed device document
 
@@ -325,7 +325,7 @@ Once Firebase is configured and the app is running, validate these flows:
 - [ ] Run `npm run dev` in the `02_neda_v01` folder
 - [ ] Open the app in your browser
 - [ ] Find your device ID using the console command: `localStorage.getItem('neda-device-id')`
-- [ ] Add this device ID to the `allowedDevices` collection in Firestore (with a passkey and label)
+- [ ] Add this device ID to the `neda_allowedDevices` collection in Firestore (with a passkey and label)
 - [ ] Enter a name in the Settings panel and click Save
 - [ ] Click the **Hello** button
 - [ ] Verify the message appears in the UI (check the "Recent messages" section)
@@ -340,7 +340,7 @@ Once Firebase is configured and the app is running, validate these flows:
 
 ### Test 3: Erase logic (requires 2 devices)
 
-- [ ] Add a second device ID to the `allowedDevices` collection
+- [ ] Add a second device ID to the `neda_allowedDevices` collection
 - [ ] Open two browser tabs/windows or private windows
 - [ ] From the first device, send a hello message
 - [ ] From the second device, send an "Erase" message (click the **Erase** button)

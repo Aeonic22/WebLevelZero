@@ -95,7 +95,7 @@ The app should read the last 10 messages from the backend.
 
 ### 4.4 Erase maintenance rule
 
-When a user sends a message containing “ERASE”, the system should inspect the recent message stream. If there are at least 2 consecutive erase messages from at least 2 different users/devices, the system wipes the “message” table.
+When a user sends a message containing "ERASE", the system should inspect the recent message stream. If there are at least 2 consecutive erase messages from at least 2 different users/devices, the system wipes the "neda_messages" collection.
 
 This is intentionally simple and functional rather than elegant.
 
@@ -103,7 +103,7 @@ This is intentionally simple and functional rather than elegant.
 
 ## 5. Data requirements
 
-### 5.1 Message record
+### 5.1 Message record (collection: `neda_messages`)
 
 Minimum fields:
 
@@ -118,7 +118,7 @@ Optional fields:
 - source
 - userLabel
 
-### 5.2 Allowed user/device list
+### 5.2 Allowed user/device list (collection: `neda_allowedDevices`)
 
 Minimum fields:
 
@@ -130,7 +130,11 @@ Optional fields:
 - friendly name
 - registration date
 
-### 5.3 Identity model
+### 5.3 Naming convention
+
+All Neda data collections must use the `neda_` prefix to distinguish them from other miniApps' data stores that may share the same Firestore instance.
+
+### 5.4 Identity model
 
 - User and device are treated as effectively the same for this prototype
 - The database stores a device identifier as the operational identity

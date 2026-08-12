@@ -66,7 +66,7 @@ function saveName() {
 
 async function isDeviceAllowed(deviceId) {
   const allowedQuery = query(
-    collection(db, 'allowedDevices'),
+    collection(db, 'neda_allowedDevices'),
     where('deviceId', '==', deviceId)
   );
 
@@ -105,7 +105,7 @@ function renderMessages(messages) {
 async function refreshMessages() {
   try {
     const messagesQuery = query(
-      collection(db, 'messages'),
+      collection(db, 'neda_messages'),
       orderBy('timestamp', 'desc'),
       limit(10)
     );
@@ -126,12 +126,12 @@ async function sendMessage(text) {
   const allowed = await isDeviceAllowed(deviceId);
 
   if (!allowed) {
-    setStatus('This device is not allowed. Add it to allowedDevices in Firestore.', 'error');
+    setStatus('This device is not allowed. Add it to neda_allowedDevices in Firestore.', 'error');
     return;
   }
 
   try {
-    await addDoc(collection(db, 'messages'), {
+    await addDoc(collection(db, 'neda_messages'), {
       timestamp: new Date().toISOString(),
       deviceId,
       name,
@@ -150,7 +150,7 @@ async function sendMessage(text) {
 async function maybeClearMessages() {
   try {
     const messagesQuery = query(
-      collection(db, 'messages'),
+      collection(db, 'neda_messages'),
       orderBy('timestamp', 'desc'),
       limit(10)
     );
@@ -167,7 +167,7 @@ async function maybeClearMessages() {
       return;
     }
 
-    const deletePromises = items.map((item) => deleteDoc(doc(db, 'messages', item.id)));
+    const deletePromises = items.map((item) => deleteDoc(doc(db, 'neda_messages', item.id)));
     await Promise.all(deletePromises);
     setStatus('Erase condition met. Messages cleared.', 'success');
     await refreshMessages();
