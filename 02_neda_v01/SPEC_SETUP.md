@@ -268,7 +268,7 @@ Replace these placeholders with your actual Firebase config values from the Fire
 
 ### Message sending
 
-- [ ] Read the current device ID or generate a stable client-side identifier
+- [x] Read the current device ID or generate a stable client-side identifier
 - [ ] Read the current chosen display name from local state or localStorage
 - [ ] Validate that the device is in allowedDevices
 - [ ] Send a new document to the `neda_messages` collection on hello or erase

@@ -11,11 +11,13 @@ import {
   deleteDoc,
   doc
 } from 'firebase/firestore';
+import { getAuth, signInAnonymously } from 'firebase/auth';
 
 import { firebaseConfig } from './firebase-config.js';
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
+const auth = getAuth(app);
 
 const STORAGE_KEYS = {
   name: 'neda-display-name',
@@ -106,7 +108,7 @@ async function refreshMessages() {
   try {
     const messagesQuery = query(
       collection(db, 'neda_messages'),
-      orderBy('timestamp', 'desc'),
+      //orderBy('timestamp', 'desc'),
       limit(10)
     );
 
@@ -151,7 +153,7 @@ async function maybeClearMessages() {
   try {
     const messagesQuery = query(
       collection(db, 'neda_messages'),
-      orderBy('timestamp', 'desc'),
+      //orderBy('timestamp', 'desc'),
       limit(10)
     );
 
@@ -198,5 +200,17 @@ function initializeUI() {
   });
 }
 
-initializeUI();
-refreshMessages();
+async function startApp() {
+  try {
+    setStatus('Initializing...', '');
+    await signInAnonymously(auth);
+    initializeUI();
+    await refreshMessages();
+  } catch (error) {
+    console.error('Failed to initialize app:', error);
+    setStatus('Failed to connect. Enable Anonymous Auth in Firebase Console.', 'error');
+  }
+}
+
+startApp();
+
