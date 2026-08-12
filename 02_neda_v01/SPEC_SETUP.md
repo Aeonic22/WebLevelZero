@@ -62,7 +62,9 @@ This file provides the detailed technical checklist for the Firebase setup path.
 - [x] Open **Firestore Database** in your Firebase project
 - [x] Click **Create collection**
 - [x] Name it `neda_messages`
-- [x] For the first document, click **Auto ID**, then click **Save**
+- [ ] Click **Auto ID** for the first document
+- [ ] Add at least one field (e.g., `placeholder` as a string with value `temp`) — required before saving
+- [ ] Click **Save**
 - [ ] After creation, delete that auto-created document (we'll add real messages from the app later)
 
 #### Create the `neda_allowedDevices` collection
