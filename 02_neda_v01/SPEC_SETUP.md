@@ -62,21 +62,21 @@ This file provides the detailed technical checklist for the Firebase setup path.
 - [x] Open **Firestore Database** in your Firebase project
 - [x] Click **Create collection**
 - [x] Name it `neda_messages`
-- [ ] Click **Auto ID** for the first document
-- [ ] Add at least one field (e.g., `placeholder` as a string with value `temp`) — required before saving
-- [ ] Click **Save**
-- [ ] After creation, delete that auto-created document (we'll add real messages from the app later)
+- [x] Click **Auto ID** for the first document
+- [x] Add at least one field (e.g., `placeholder` as a string with value `temp`) — required before saving
+- [x] Click **Save**
+- [x] After creation, delete that auto-created document (we'll add real messages from the app later)
 
 #### Create the `neda_allowedDevices` collection
 
-- [ ] Click **Create collection** again
-- [ ] Name it `neda_allowedDevices`
-- [ ] Click **Auto ID** for the first document
-- [ ] Add these fields to the document:
+- [x] Click **Create collection** again
+- [x] Name it `neda_allowedDevices`
+- [x] Click **Auto ID** for the first document
+- [x] Add these fields to the document:
   - `deviceId` (string) — see below for how to get the device ID
   - `passkey` (string) — e.g., `family-pass-001`
   - `label` (string) — e.g., `Test Device`
-- [ ] Click **Save**
+- [x] Click **Save**
 
 #### How to find your device ID
 
@@ -189,9 +189,11 @@ These rules are intentionally simple for prototyping. Production rules would be 
 
 ### Step 7: Install Firebase tooling locally
 
-- [ ] Install Firebase CLI with npm if needed
-- [ ] Run the Firebase login flow
-- [ ] Initialize Firebase in the project folder if hosting is used
+Firebase CLI is needed to deploy to Firebase Hosting once the app is working.
+
+- [x] Install Firebase CLI with npm
+- [x] Run the Firebase login flow
+- [x] Initialize Firebase in the project folder for hosting
 
 Command example:
 
@@ -200,6 +202,8 @@ npm install -g firebase-tools
 firebase login
 firebase init hosting
 ```
+
+**Note:** You'll use these tools to deploy once the app is tested and working locally.
 
 ---
 
@@ -222,9 +226,9 @@ Create a simple structure like this:
 ### Step 2: Install dependencies and run the dev server
 
 - [x] Create `package.json` with Firebase and Vite dependencies
-- [ ] Run `npm install` in the `02_neda_v01` folder
-- [ ] Run `npm run dev` to start the local dev server
-- [ ] Open the app in your browser (usually `http://localhost:5173`)
+- [x] Run `npm install` in the `02_neda_v01` folder
+- [x] Run `npm run dev` to start the local dev server
+- [x] Open the app in your browser (usually `http://localhost:5173`)
 
 ### Step 3: Prepare the static app
 
@@ -241,7 +245,7 @@ All of these are already included in the generated files.
 - [x] Import Firebase SDK (already in `js/app.js`)
 - [x] Initialize Firebase with the web config (already configured in `js/app.js`)
 - [x] Use Firestore methods for reading and writing messages (already implemented)
-- [ ] Paste your Firebase config values into `js/firebase-config.js`
+- [x] Paste your Firebase config values into `js/firebase-config.js`
 
 The Firebase config file (`js/firebase-config.js`) contains placeholders:
 
@@ -388,8 +392,9 @@ The setup phase is complete when all of the following are true:
 - [ ] Firebase project exists
 - [ ] Firestore is enabled
 - [ ] `neda_messages` collection exists
-- [ ] `allowedDevices` collection exists
+- [ ] `neda_allowedDevices` collection exists
 - [ ] At least one allowed device is registered manually
+- [ ] Firebase Hosting is initialized locally via `firebase init hosting`
 - [ ] The frontend project structure is ready
 - [ ] The app can read and write to Firestore
 - [ ] The erase rule is understood and ready to implement
