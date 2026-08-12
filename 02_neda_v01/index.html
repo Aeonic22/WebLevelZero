@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Neda</title>
+    <link rel="stylesheet" href="./css/style.css" />
+  </head>
+  <body>
+    <main class="app-shell">
+      <header class="topbar">
+        <h1>Neda</h1>
+        <button id="settingsToggle" class="secondary" type="button">Settings</button>
+      </header>
+
+      <section id="settingsPanel" class="card hidden">
+        <label for="nameInput">Your name</label>
+        <div class="settings-row">
+          <input id="nameInput" type="text" maxlength="40" placeholder="Enter your name" />
+          <button id="saveName" type="button">Save</button>
+        </div>
+      </section>
+
+      <section class="card controls">
+        <div class="button-row">
+          <button id="helloBtn" class="primary" type="button">Hello</button>
+          <button id="eraseBtn" class="danger" type="button">Erase</button>
+        </div>
+      </section>
+
+      <section class="card">
+        <h2>Recent messages</h2>
+        <ul id="messagesList" class="messages-list"></ul>
+      </section>
+
+      <p id="statusMessage" class="status-message" aria-live="polite"></p>
+    </main>
+
+    <script type="module" src="./js/app.js"></script>
+  </body>
+</html>

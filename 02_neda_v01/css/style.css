@@ -1,0 +1,154 @@
+:root {
+  --bg: #f5f7fb;
+  --panel: #ffffff;
+  --primary: #2d6cdf;
+  --primary-dark: #1f53b3;
+  --danger: #d93d3d;
+  --text: #1a1f2c;
+  --muted: #5d6470;
+  --border: #dfe7f4;
+  --success: #1d8f5f;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html, body {
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+}
+
+body {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  padding: 20px;
+}
+
+.app-shell {
+  width: min(100%, 460px);
+}
+
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+h1, h2 {
+  margin: 0;
+}
+
+.card {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 16px;
+  box-shadow: 0 2px 8px rgba(26, 31, 44, 0.04);
+}
+
+.hidden {
+  display: none;
+}
+
+.settings-row {
+  display: flex;
+  gap: 10px;
+  margin-top: 12px;
+}
+
+input {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font-size: 1rem;
+}
+
+button {
+  border: 0;
+  border-radius: 8px;
+  padding: 10px 16px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: 0.15s ease-in-out;
+}
+
+button:hover {
+  opacity: 0.96;
+}
+
+button.primary {
+  background: var(--primary);
+  color: #fff;
+}
+
+button.primary:hover {
+  background: var(--primary-dark);
+}
+
+button.secondary {
+  background: #edf3ff;
+  color: var(--primary);
+}
+
+button.danger {
+  background: var(--danger);
+  color: #fff;
+}
+
+.button-row {
+  display: flex;
+  gap: 12px;
+}
+
+.button-row button {
+  flex: 1;
+}
+
+.messages-list {
+  list-style: none;
+  padding: 0;
+  margin: 14px 0 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.message-item {
+  background: #f8f9fd;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 10px 12px;
+}
+
+.message-meta {
+  font-size: 0.75rem;
+  color: var(--muted);
+  margin-bottom: 4px;
+}
+
+.message-text {
+  font-size: 0.95rem;
+  line-height: 1.4;
+}
+
+.status-message {
+  min-height: 20px;
+  margin: 0;
+  font-size: 0.9rem;
+  color: var(--muted);
+}
+
+.status-message.success {
+  color: var(--success);
+}
+
+.status-message.error {
+  color: var(--danger);
+}

@@ -39,13 +39,13 @@ This file provides the detailed technical checklist for the Firebase setup path.
 
 ### Step 1: Create a Firebase project
 
-- [ ] Go to Firebase Console
-- [ ] Create a new project named something like "neda-family-prototype"
-- [ ] Accept the default settings unless a specific requirement exists
+- [x] Go to Firebase Console
+- [x] Create a new project named something like "neda-family-prototype"
+- [x] Accept the default settings unless a specific requirement exists
 
 ### Step 2: Add a web app
 
-- [ ] Register a web app inside the Firebase project
+- [x] Register a web app inside the Firebase project
 - [ ] Copy the Firebase config values
 - [ ] Save them in a frontend config file or JS module
 
