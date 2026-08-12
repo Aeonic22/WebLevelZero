@@ -106,6 +106,7 @@ function renderMessages(messages) {
 
 async function refreshMessages() {
   try {
+    console.log('Fetching messages from Firestore...');
     const messagesQuery = query(
       collection(db, 'neda_messages'),
       //orderBy('timestamp', 'desc'),
@@ -113,10 +114,13 @@ async function refreshMessages() {
     );
 
     const snapshot = await getDocs(messagesQuery);
+    console.log('Successfully loaded', snapshot.docs.length, 'messages');
     const messages = snapshot.docs.map((docSnap) => ({ id: docSnap.id, ...docSnap.data() }));
     renderMessages(messages);
   } catch (error) {
     console.error('Failed to load messages:', error);
+    console.error('Error code:', error.code);
+    console.error('Error message:', error.message);
     setStatus('Could not load messages. Check Firebase setup.', 'error');
   }
 }
@@ -203,12 +207,29 @@ function initializeUI() {
 async function startApp() {
   try {
     setStatus('Initializing...', '');
-    await signInAnonymously(auth);
+    console.log('Starting app initialization...');
+    console.log('Auth object:', auth);
+    console.log('Database:', db);
+    
+    // Try to sign in anonymously
+    signInAnonymously(auth).then(userCred => {
+      console.log('✓ Anonymous sign in successful:', userCred.user.uid);
+      setStatus('Connected', 'success');
+    }).catch(authError => {
+      console.error('✗ Anonymous sign in failed:', authError.code, authError.message);
+      setStatus(`Auth failed: ${authError.message}`, 'error');
+    });
+    
     initializeUI();
-    await refreshMessages();
+    console.log('UI initialized');
+    
+    // Give auth a moment to complete, then try to load messages
+    setTimeout(async () => {
+      await refreshMessages();
+    }, 1000);
   } catch (error) {
     console.error('Failed to initialize app:', error);
-    setStatus('Failed to connect. Enable Anonymous Auth in Firebase Console.', 'error');
+    setStatus(`Failed to connect: ${error.message}`, 'error');
   }
 }
 
