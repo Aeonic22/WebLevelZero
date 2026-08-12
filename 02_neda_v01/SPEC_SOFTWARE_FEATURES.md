@@ -23,7 +23,7 @@ The mobile-first UI should contain only a few essential elements:
 ### 2.2 Message list
 
 - Show the last 10 messages
-- Each entry should include a timestamp and the message text
+- Each entry should include a timestamp, the user-set name, and the message text
 - Messages should be displayed in reverse chronological order (newest first or newest last, as long as it is consistent)
 - The list should refresh after a successful send or after an erase event
 
@@ -63,8 +63,8 @@ When the user taps “Erase”:
 
 - the client sends an erase-style message to the backend
 - the backend logs the action as a message event
-- the application checks recent history for repeated erase events
-- if the erase condition is satisfied, the message table is cleared
+- the backend checks the recent sequence of erase events
+- if at least 2 consecutive erase messages have been received from at least 2 different users/devices, the message table is cleared
 
 Example payload:
 
@@ -95,7 +95,7 @@ The app should read the last 10 messages from the backend.
 
 ### 4.4 Erase maintenance rule
 
-When a user sends a message containing “ERASE”, the system should check recent messages. If one or more recent entries indicate erase intent, the system wipes the “message” table.
+When a user sends a message containing “ERASE”, the system should inspect the recent message stream. If there are at least 2 consecutive erase messages from at least 2 different users/devices, the system wipes the “message” table.
 
 This is intentionally simple and functional rather than elegant.
 
@@ -110,12 +110,13 @@ Minimum fields:
 - timestamp
 - device ID
 - message text
+- user display name
 
 Optional fields:
 
-- display name
 - created_at
 - source
+- userLabel
 
 ### 5.2 Allowed user/device list
 
@@ -129,6 +130,12 @@ Optional fields:
 - friendly name
 - registration date
 
+### 5.3 Identity model
+
+- User and device are treated as effectively the same for this prototype
+- The database stores a device identifier as the operational identity
+- The app-entered name is the display name shown in the message feed and is not treated as a separate user identity system
+
 ---
 
 ## 6. UX expectations
@@ -138,6 +145,7 @@ Optional fields:
 - Simple interface with almost no learning curve
 - Immediate feedback after each action
 - Reliable basic behavior over visual sophistication
+- Testing will begin on one laptop with a browser, not yet on multiple real devices
 
 ---
 
@@ -145,21 +153,24 @@ Optional fields:
 
 - [ ] The app runs in the browser on mobile and is easy to open from the home screen
 - [ ] A user may enter a name and save it
+- [ ] The display name appears in message entries
 - [ ] A user may send a hello message
 - [ ] The system stores the message in the backend
 - [ ] The app displays the most recent messages
 - [ ] A user may send an erase message
 - [ ] The backend clears stored messages when the erase condition is triggered
 - [ ] Only approved devices are allowed to post messages
+- [ ] The erase rule requires at least 2 consecutive erase messages from at least 2 different users/devices
 
 ---
 
 ## 8. Open questions for implementation
 
-- [ ] Will this be tested on a single machine with multiple browser sessions or on multiple physical devices?
-- [ ] Is the backend going to be Firebase or another simple provider?
-- [ ] Should a device register itself automatically or by manual setup?
-- [ ] Is the app expected to support names only, or also distinct family member identities?
+- [x] The project will be tested on one laptop first
+- [x] The backend will be chosen as a simple online provider
+- [x] Allowed devices will be managed manually
+- [x] User and device are treated as the same identity for this prototype
+- [ ] Which online provider should be chosen if Firebase is not used?
 
 ---
 
@@ -169,8 +180,20 @@ The first version should prioritize:
 
 1. working read/write flows
 2. basic device authorization
-3. recent message display
-4. reset behavior for erase messages
+3. recent message display with user names
+4. reset behavior for erase messages after 2 consecutive erase events from 2 users/devices
 5. straightforward mobile UI
 
 No advanced UI, authentication, or architecture should be added until the prototype is working reliably.
+
+---
+
+## 10. Recommended backend alternatives
+
+If Firebase is not chosen, the strongest alternatives are:
+
+- Supabase
+- PocketBase
+- Render or Railway with Postgres
+
+Supabase is the most natural alternative because it is online, beginner-friendly, and offers a simple database model with minimal complexity. It is a strong option if the goal is to keep the backend online but avoid Firebase.

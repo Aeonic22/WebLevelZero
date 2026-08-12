@@ -17,7 +17,7 @@ The app is intentionally lightweight and should be easy to operate by a develope
 - Recommended approach: lightweight web app, ideally mobile-friendly and installable as a home-screen app
 - Acceptable implementation: plain HTML + JavaScript + CSS for the frontend
 - Backend: small online database service with simple API access
-- Authentication: simple user identification based on device ID or passkey, not full user management
+- Authentication: simple user identification based on device ID, with manual allowlist management for the prototype
 
 ### 2.2 Recommended architecture
 
@@ -26,7 +26,7 @@ A minimal client-server architecture is sufficient:
 - Client: browser-based web app for mobile devices
 - Frontend: simple HTML, CSS, and JavaScript
 - API/backend: lightweight service layer that accepts message writes and reads
-- Database: one shared table for messages and one simple table for allowed devices or passkeys
+- Database: one shared collection/table for messages and one collection/table for allowed devices
 - Authentication/authorization: allow only recognized devices to submit messages
 
 This keeps the project easy to learn, low cost, and quick to prototype.
@@ -45,29 +45,123 @@ This keeps the project easy to learn, low cost, and quick to prototype.
 ### 3.2 Backend / persistence
 
 - Data storage should be an online database service that is easy to configure and free for small use
-- Firebase is the most natural fit for a beginner-friendly prototype, but the design should remain simple enough to adapt to other services
+- Firebase Firestore is the primary recommendation for this prototype because it is beginner-friendly and easy to learn
+- Alternative online options should remain viable, but Firebase is the default choice unless a better low-overhead alternative is preferred
 - Keep data model minimal and explicit
 
 ### 3.3 Authentication and security
 
-- Each device should be identifiable through a local device ID, passkey, or backend-approved identifier
-- Do not over-engineer authentication; the goal is simple family use, not enterprise-grade security
-- Access should be restricted to devices or keys registered in the backend
+- Each device should be identifiable through a local device ID or backend-approved identifier
+- For this prototype, user and device are treated as effectively the same concept: a device is the identity, and the app's user-entered name is only display text
+- The device name stored in the database is operational metadata; it is not used in practice by the user-facing product flow
+- Access should be restricted to devices registered in the backend
+- Manual maintenance of the allowedDevices list is acceptable at this stage
 
 ### 3.4 Data model
 
-Message table fields should include at least:
+Message collection/table fields should include at least:
 
 - timestamp
 - device identifier
 - message text
-- optional display name or derived label
+- display name entered by the user
 
-Allowed devices table fields should include at least:
+Allowed devices collection/table fields should include at least:
 
 - device identifier
 - optional passkey or token
 - optional registration date
+- optional simple device label for internal reference
+
+---
+
+## 4. Functional requirements summary
+
+- User can enter a name in settings
+- The entered name is shown in messages
+- User can send a “hello” message
+- User can send an “erase” message
+- App displays the most recent 10 messages
+- App refreshes after each successful send
+- System checks whether the device is allowed to interact
+- System supports one maintenance action: erase all messages when at least 2 consecutive erase messages are submitted by at least 2 different users/devices
+
+---
+
+## 5. Business / usage assumptions
+
+- The app is for a family of two or more users
+- The app is a prototype and should stay intentionally simple
+- No polished UI is required for now
+- The application should be easy to demonstrate and easy to explain
+- Testing will begin on one laptop first, with browser-based validation rather than production device deployment
+
+---
+
+## 6. Setup plan
+
+### Recommended implementation path
+
+- [x] Confirm that testing will begin on one laptop
+- [x] Decide on a backend option and architecture
+- [x] Decide that allowedDevices will be managed manually
+- [ ] Create a simple project folder and decide on a static frontend structure
+- [ ] Create a minimal backend API or database rules that support create/read operations
+- [ ] Register authorized devices manually
+- [ ] Build the client UI for messages, name settings, and refresh behavior
+- [ ] Implement erase logic requiring 2 consecutive erase messages from at least 2 users/devices
+- [ ] Validate the full workflow on a laptop/browser first
+
+### Minimum technical prerequisites
+
+- A browser for testing
+- A simple online database provider
+- Basic web project structure
+- Optional local development server if needed for testing
+
+---
+
+## 7. Risks and open questions
+
+- [x] Testing can be done effectively using one PC initially
+- [ ] Should the backend be configured and tested directly through API calls rather than only through the browser UI?
+- [ ] Is the family use case broad enough to require multiple devices and multiple names, or a single shared family identity?
+- [x] Device registration will be handled manually for the prototype
+- [ ] Which online database provider will be used if Firebase is not chosen?
+
+---
+
+## 8. Recommended implementation strategy
+
+Keep the first version intentionally small and robust:
+
+1. Start with one static frontend page
+2. Use a minimal message store in an online database service
+3. Add authorization for recognized devices only
+4. Implement read of last 10 rows
+5. Add reset logic requiring 2 consecutive erase messages from at least 2 users/devices
+6. Validate end-to-end behavior before refining UX
+
+This approach maximizes learning and keeps the project low-risk.
+
+---
+
+## 9. Alternative online backend options
+
+If Firebase is not preferred, good alternatives include:
+
+- Supabase
+- PocketBase
+- Render + Postgres backend
+- Railway + Postgres backend
+
+Among these, Supabase is the most natural alternative because it offers a simple online database, auth support, and a familiar developer experience while staying lightweight enough for a prototype.
+
+For this project, the best practical alternatives are:
+
+- Firebase Firestore: simplest for learning and online backend setup
+- Supabase: best alternative if a more SQL-like and open model is preferred
+- PocketBase: very simple self-hosted or hosted option, but may be slightly less conventional for a beginner
 
 ---
 
