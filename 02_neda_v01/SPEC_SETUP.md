@@ -72,10 +72,8 @@ This file provides the detailed technical checklist for the Firebase setup path.
 - [x] Click **Create collection** again
 - [x] Name it `neda_allowedDevices`
 - [x] Click **Auto ID** for the first document
-- [x] Add these fields to the document:
-  - `deviceId` (string) — see below for how to get the device ID
-  - `passkey` (string) — e.g., `family-pass-001`
-  - `label` (string) — e.g., `Test Device`
+- [x] Add `deviceId` (string) as an id for document
+- [x] Delete any fields in document
 - [x] Click **Save**
 
 #### How to find your device ID
@@ -339,10 +337,10 @@ Once Firebase is configured and the app is running, validate these flows:
 
 ### Test 2: Unknown device rejection
 
-- [ ] Open the app in an incognito/private browser window (creates a new device ID)
-- [ ] Try to send a hello message
-- [ ] Verify that it fails with a message about the device not being allowed
-- [ ] Confirm the message does NOT appear in Firestore
+- [x] Open the app in an incognito/private browser window (creates a new device ID)
+- [x] Try to send a hello message
+- [x] Verify that it fails with a message about the device not being allowed
+- [x] Confirm the message does NOT appear in Firestore
 
 ### Test 3: Erase logic (requires 2 devices)
 
@@ -356,12 +354,12 @@ Once Firebase is configured and the app is running, validate these flows:
 
 ### Test 4: Settings persistence
 
-- [ ] Enter a custom name in Settings
-- [ ] Send a hello message
-- [ ] Verify the message shows your custom name
-- [ ] Refresh the browser
-- [ ] Verify your name is still saved
-- [ ] Send another message and verify your name persists
+- [x] Enter a custom name in Settings
+- [x] Send a hello message
+- [x] Verify the message shows your custom name
+- [x] Refresh the browser
+- [x] Verify your name is still saved
+- [x] Send another message and verify your name persists
 
 ### Success criteria
 
