@@ -269,21 +269,21 @@ Replace these placeholders with your actual Firebase config values from the Fire
 ### Message sending
 
 - [x] Read the current device ID or generate a stable client-side identifier
-- [ ] Read the current chosen display name from local state or localStorage
-- [ ] Validate that the device is in allowedDevices
-- [ ] Send a new document to the `neda_messages` collection on hello or erase
+- [x] Read the current chosen display name from local state or localStorage
+- [x] Validate that the device is in allowedDevices
+- [x] Send a new document to the `neda_messages` collection on hello or erase
 
 ### Message reading
 
-- [ ] Query the last 10 messages
-- [ ] Sort by timestamp or createdAt descending
-- [ ] Render them into the UI
+- [x] Query the last 10 messages
+- [x] Sort by timestamp or createdAt descending
+- [x] Render them into the UI
 
 ### Settings behavior
 
-- [ ] Allow the user to enter a name
-- [ ] Save the name locally in localStorage
-- [ ] Use the saved name in future message posts
+- [x] Allow the user to enter a name
+- [x] Save the name locally in localStorage
+- [x] Use the saved name in future message posts
 
 ---
 
@@ -328,14 +328,14 @@ Once Firebase is configured and the app is running, validate these flows:
 
 ### Test 1: Basic message sending
 
-- [ ] Run `npm run dev` in the `02_neda_v01` folder
-- [ ] Open the app in your browser
-- [ ] Find your device ID using the console command: `localStorage.getItem('neda-device-id')`
-- [ ] Add this device ID to the `neda_allowedDevices` collection in Firestore (with a passkey and label)
-- [ ] Enter a name in the Settings panel and click Save
-- [ ] Click the **Hello** button
-- [ ] Verify the message appears in the UI (check the "Recent messages" section)
-- [ ] Verify the message appears in Firestore in the `neda_messages` collection
+- [x] Run `npm run dev` in the `02_neda_v01` folder
+- [x] Open the app in your browser
+- [x] Find your device ID using the console command: `localStorage.getItem('neda-device-id')`
+- [x] Add this device ID to the `neda_allowedDevices` collection in Firestore (with a passkey and label)
+- [x] Enter a name in the Settings panel and click Save
+- [x] Click the **Hello** button
+- [x] Verify the message appears in the UI (check the "Recent messages" section)
+- [x] Verify the message appears in Firestore in the `neda_messages` collection
 
 ### Test 2: Unknown device rejection
 

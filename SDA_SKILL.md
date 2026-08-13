@@ -35,12 +35,13 @@ All folders below the 2026_WebLevelZero folder are STANDALONE applications and a
 # Workflow loop
 
 Has 3 phases. Agent must know which phase it is in. User decides on the phase, agent can only suggest.
+During all phases agent will update the .md files with new conclusions from user conversation where appropriate or needed.
 
 ## Specification phase
 
 Guided by DRAFT_ARCHITECTURE_AND_PLANNING.md and DRAFT_SOFTWARE_FEATURES.md files.
 No code is written here, just the specification is developed.
-Agent reads mentioned files and asks user next most important question to refine specification, architecture or workflow. Based on users answer, agend updates SPEC_ARCHITECTURE_AND_PLANNING.md and SPEC_SOFTWARE_FEATURES.md files.
+Agent reads mentioned files and asks user next most important question to refine specification, architecture or workflow. Based on users answer, agent updates SPEC_ARCHITECTURE_AND_PLANNING.md and SPEC_SOFTWARE_FEATURES.md files.
 Phase continues until agent has a clear path to implement the software. 
 
 ## Setup phase

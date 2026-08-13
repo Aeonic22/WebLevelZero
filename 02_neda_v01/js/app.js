@@ -38,6 +38,7 @@ const elements = {
 function setStatus(message, type = '') {
   elements.statusMessage.textContent = message;
   elements.statusMessage.className = 'status-message';
+  console.log(`Status: ${message} [${type}]`);
 
   if (type) {
     elements.statusMessage.classList.add(type);
@@ -66,7 +67,9 @@ function saveName() {
   elements.settingsPanel.classList.add('hidden');
 }
 
+/*
 async function isDeviceAllowed(deviceId) {
+  console.log('isDeviceAllowed');
   const allowedQuery = query(
     collection(db, 'neda_allowedDevices'),
     where('deviceId', '==', deviceId)
@@ -75,6 +78,7 @@ async function isDeviceAllowed(deviceId) {
   const snapshot = await getDocs(allowedQuery);
   return !snapshot.empty;
 }
+*/
 
 function renderMessages(messages) {
   elements.messagesList.innerHTML = '';
@@ -128,25 +132,31 @@ async function refreshMessages() {
 async function sendMessage(text) {
   const deviceId = getOrCreateDeviceId();
   const name = getName();
+  console.log(`Attempting to send message from device ${deviceId} with name ${name}: "${text}"`);
 
-  const allowed = await isDeviceAllowed(deviceId);
+  // const allowed = await isDeviceAllowed(deviceId);
+  // console.log(`Device ${deviceId} allowed status: ${allowed}`);
 
-  if (!allowed) {
-    setStatus('This device is not allowed. Add it to neda_allowedDevices in Firestore.', 'error');
-    return;
-  }
+  // if (!allowed) {
+  //   setStatus('This device is not allowed. Add it to neda_allowedDevices in Firestore.', 'error');
+  //   return;
+  // }
 
   try {
+    console.log('try');
     await addDoc(collection(db, 'neda_messages'), {
       timestamp: new Date().toISOString(),
       deviceId,
       name,
       text
     });
+    console.log('after try');
 
     setStatus('Message sent successfully.', 'success');
     await refreshMessages();
+    console.log('Message sent and messages refreshed.');
     await maybeClearMessages();
+    console.log('Maybe clear done');
   } catch (error) {
     console.error('Write failed:', error);
     setStatus('Failed to send message. Check your Firebase connection and rules.', 'error');
