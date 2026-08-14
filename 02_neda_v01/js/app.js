@@ -61,13 +61,21 @@ function getName() {
   return localStorage.getItem(STORAGE_KEYS.name) || 'Guest';
 }
 
-function updateDeviceIdDisplay() {
+async function updateDeviceIdDisplay() {
   if (!elements.deviceIdDisplay) {
     return;
   }
 
   const deviceId = getOrCreateDeviceId();
   elements.deviceIdDisplay.value = deviceId;
+
+  // Automatically copy to clipboard on mobile/when displayed
+  try {
+    await navigator.clipboard.writeText(deviceId);
+    console.log('Device ID auto-copied to clipboard');
+  } catch (error) {
+    console.log('Could not auto-copy to clipboard:', error);
+  }
 }
 
 function saveName() {
@@ -209,6 +217,10 @@ function initializeUI() {
 
   elements.settingsToggle.addEventListener('click', () => {
     elements.settingsPanel.classList.toggle('hidden');
+    // Update and copy device ID when settings panel is opened
+    if (!elements.settingsPanel.classList.contains('hidden')) {
+      updateDeviceIdDisplay();
+    }
   });
 
   elements.deviceIdBtn.addEventListener('click', async () => {
