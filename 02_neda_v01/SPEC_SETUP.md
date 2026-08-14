@@ -403,3 +403,51 @@ The setup phase is complete when all of the following are true:
 ## 11. Next recommended action
 
 Once this setup checklist is complete, proceed to the development phase and begin implementing the frontend UI and Firebase integration in the app folder.
+
+---
+
+## 12. Build and deployment to GitHub Pages
+
+### Build process
+
+This project uses **Vite** as the build tool.
+
+- [x] Build script configured in `package.json` as `npm run build`
+- [x] Build configuration defined in `vite.config.js` at the project root
+- [x] Build output directory: `dist/` (at the project root, not in `02_neda_v01/`)
+- [x] The build bundles all HTML entry points and assets from all folders (00_miniApps, 01_cssPlayground, 02_neda_v01, etc.)
+
+### Deployment to GitHub Pages
+
+The project is published to GitHub Pages using the `docs/` folder on the main branch.
+
+#### Deployment workflow
+
+1. **Build the project**
+   - Run `npm run build` from the project root
+   - Vite outputs all bundled files to `dist/`
+
+2. **Move dist contents to docs**
+   - Agent will move (not copy) all contents from `dist/` to `docs/`
+   - This ensures the docs folder always reflects the latest build without stale files
+   - The move operation replaces the entire `docs/` directory contents
+
+3. **Commit and push**
+   - Stage changes: `git add docs/`
+   - Commit: `git commit -m "Publish build"`
+   - Push: `git push`
+   - GitHub Pages will automatically serve the updated site from `docs/` folder
+
+#### Deployment checklist
+
+- [ ] Run `npm run build` at project root
+- [ ] Verify `dist/` folder is populated with bundled files
+- [ ] Agent moves all files from `dist/` to `docs/`
+- [ ] Verify `docs/` contains the new build output
+- [ ] Commit the updated `docs/` folder
+- [ ] Push changes to main branch
+- [ ] Verify site is live at GitHub Pages URL
+
+#### Note
+
+Do not manually edit or maintain the `docs/` folder; it should only be updated by the build → move → commit → push workflow. Any manual edits will be overwritten on the next build cycle.
