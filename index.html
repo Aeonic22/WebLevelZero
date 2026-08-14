@@ -5,18 +5,24 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="theme-color" content="#ffffff" />
     <title>WebLevelZero</title>
-    <link rel="manifest" href="./manifest.json" />
+    <link rel="manifest" href="/WebLevelZero/manifest.json" />
   </head>
   <body>
-    <h1>WebLevelZero</h1>
-    <h1>
-      <a href="https://aeonic22.github.io/WebLevelZero/02_neda_v01">WebLevelZero</a>
-    </h1>
+    <main>
+      <h1>WebLevelZero</h1>
 
-    <script>
-      if ("serviceWorker" in navigator) {
-        navigator.serviceWorker.register("./js/sw.js");
-      }
-    </script>
+      <nav aria-label="Project links">
+        <ul>
+          <li><a href="/WebLevelZero/">Home</a></li>
+          <li><a href="/WebLevelZero/00_miniApps/">Mini Apps Hub</a></li>
+          <li><a href="/WebLevelZero/00_miniApps/pages/hello-world/">Hello World</a></li>
+          <li><a href="/WebLevelZero/00_miniApps/pages/list/">List</a></li>
+          <li><a href="/WebLevelZero/00_miniApps/pages/todo/">Todo</a></li>
+          <li><a href="/WebLevelZero/00_miniApps/pages/tic-tac-toe/">Tic Tac Toe</a></li>
+          <li><a href="/WebLevelZero/01_cssPlayground/">CSS Playground</a></li>
+          <li><a href="/WebLevelZero/02_neda_v01/">Neda</a></li>
+        </ul>
+      </nav>
+    </main>
   </body>
 </html>
