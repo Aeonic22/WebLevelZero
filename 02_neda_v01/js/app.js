@@ -29,6 +29,7 @@ const elements = {
   settingsToggle: document.getElementById('settingsToggle'),
   nameInput: document.getElementById('nameInput'),
   saveName: document.getElementById('saveName'),
+  deviceIdBtn: document.getElementById('deviceIdBtn'),
   helloBtn: document.getElementById('helloBtn'),
   eraseBtn: document.getElementById('eraseBtn'),
   messagesList: document.getElementById('messagesList'),
@@ -58,6 +59,15 @@ function getOrCreateDeviceId() {
 
 function getName() {
   return localStorage.getItem(STORAGE_KEYS.name) || 'Guest';
+}
+
+function updateDeviceIdDisplay() {
+  if (!elements.deviceIdDisplay) {
+    return;
+  }
+
+  const deviceId = getOrCreateDeviceId();
+  elements.deviceIdDisplay.value = deviceId;
 }
 
 function saveName() {
@@ -201,6 +211,21 @@ function initializeUI() {
     elements.settingsPanel.classList.toggle('hidden');
   });
 
+  elements.deviceIdBtn.addEventListener('click', async () => {
+    const deviceId = getOrCreateDeviceId();
+    elements.deviceIdDisplay.value = deviceId;
+
+    try {
+      await navigator.clipboard.writeText(deviceId);
+      setStatus('Device ID copied to clipboard.', 'success');
+    } catch (error) {
+      setStatus('Device ID ready to copy. Select it and copy manually.', 'success');
+      elements.deviceIdDisplay.focus();
+      elements.deviceIdDisplay.select();
+    }
+  });
+
+  updateDeviceIdDisplay();
   elements.saveName.addEventListener('click', saveName);
 
   elements.helloBtn.addEventListener('click', async () => {
