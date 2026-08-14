@@ -1,13 +1,22 @@
-<link rel="manifest" href="/manifest.json">
-<meta name="theme-color" content="#ffffff">
-<body>
-  <h1>WebLevelZero</h1>
-  <h1>
-    <a href="https://aeonic22.github.io/WebLevelZero/02_neda_v01">WebLevelZero</a>
-  </h1>
-</body>
-<script>
-if ("serviceWorker" in navigator) {
-  navigator.serviceWorker.register("/js/sw.js");
-}
-</script>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#ffffff" />
+    <title>WebLevelZero</title>
+    <link rel="manifest" href="./manifest.json" />
+  </head>
+  <body>
+    <h1>WebLevelZero</h1>
+    <h1>
+      <a href="https://aeonic22.github.io/WebLevelZero/02_neda_v01">WebLevelZero</a>
+    </h1>
+
+    <script>
+      if ("serviceWorker" in navigator) {
+        navigator.serviceWorker.register("./js/sw.js");
+      }
+    </script>
+  </body>
+</html>
