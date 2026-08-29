@@ -39,6 +39,27 @@ body {
   margin-bottom: 16px;
 }
 
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.icon-btn {
+  background: #edf3ff;
+  color: var(--muted);
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  border-radius: 50%;
+  font-size: 1.1rem;
+  line-height: 1;
+}
+
+.icon-btn.active {
+  color: var(--success);
+}
+
 h1, h2 {
   margin: 0;
 }
@@ -119,6 +140,39 @@ button.danger {
   flex: 1;
 }
 
+.todo-compose {
+  position: relative;
+  margin-bottom: 12px;
+}
+
+.suggestions-list {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  right: 0;
+  z-index: 5;
+  list-style: none;
+  margin: 0;
+  padding: 4px;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(26, 31, 44, 0.08);
+  max-height: 180px;
+  overflow-y: auto;
+}
+
+.suggestions-list li {
+  padding: 8px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+
+.suggestions-list li:hover {
+  background: #edf3ff;
+}
+
 .messages-list {
   list-style: none;
   padding: 0;
@@ -144,6 +198,41 @@ button.danger {
 .message-text {
   font-size: 0.95rem;
   line-height: 1.4;
+}
+
+.message-text.completed {
+  text-decoration: line-through;
+  color: var(--muted);
+}
+
+.todo-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.todo-body {
+  flex: 1;
+  min-width: 0;
+}
+
+.todo-checkbox {
+  flex-shrink: 0;
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: #fff;
+  color: var(--success);
+  font-size: 0.9rem;
+  line-height: 1;
+}
+
+.todo-checkbox.checked {
+  background: var(--success);
+  color: #fff;
+  border-color: var(--success);
 }
 
 .status-message {

@@ -4,6 +4,7 @@ service cloud.firestore {
     match /neda_messages/{document=**} {
       allow read: if true;
       allow create: if exists(/databases/$(database)/documents/neda_allowedDevices/$(request.resource.data.deviceId));
+      allow update: if exists(/databases/$(database)/documents/neda_allowedDevices/$(request.resource.data.deviceId));
       allow delete: if request.auth != null;
     }
     match /neda_allowedDevices/{document=**} {

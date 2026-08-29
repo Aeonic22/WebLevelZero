@@ -9,6 +9,7 @@ import {
   limit,
   where,
   deleteDoc,
+  updateDoc,
   doc
 } from 'firebase/firestore';
 import { getAuth, signInAnonymously } from 'firebase/auth';
@@ -31,10 +32,17 @@ const elements = {
   saveName: document.getElementById('saveName'),
   deviceIdBtn: document.getElementById('deviceIdBtn'),
   helloBtn: document.getElementById('helloBtn'),
+  trebamBtn: document.getElementById('trebamBtn'),
   eraseBtn: document.getElementById('eraseBtn'),
+  filterToggle: document.getElementById('filterToggle'),
+  todoInput: document.getElementById('todoInput'),
+  todoSuggestions: document.getElementById('todoSuggestions'),
   messagesList: document.getElementById('messagesList'),
   statusMessage: document.getElementById('statusMessage')
 };
+
+let showCompleted = false;
+let todoDictionary = [];
 
 function setStatus(message, type = '') {
   elements.statusMessage.textContent = message;
@@ -117,28 +125,94 @@ function renderMessages(messages) {
     const text = item.text || 'Message';
     const name = item.name || 'Unknown';
 
-    entry.innerHTML = `
-      <div class="message-meta">${name} • ${time}</div>
-      <div class="message-text">${text}</div>
-    `;
+    if (item.isTodo) {
+      entry.innerHTML = `
+        <div class="todo-row">
+          <button class="todo-checkbox ${item.isComplete ? 'checked' : ''}" data-id="${item.id}" type="button" aria-label="Toggle complete">${item.isComplete ? '&#10003;' : ''}</button>
+          <div class="todo-body">
+            <div class="message-meta">${name} • ${time}</div>
+            <div class="message-text ${item.isComplete ? 'completed' : ''}">${text}</div>
+          </div>
+        </div>
+      `;
+    } else {
+      entry.innerHTML = `
+        <div class="message-meta">${name} • ${time}</div>
+        <div class="message-text">${text}</div>
+      `;
+    }
 
     elements.messagesList.appendChild(entry);
   }
+
+  elements.messagesList.querySelectorAll('.todo-checkbox').forEach((btn) => {
+    btn.addEventListener('click', () => toggleTodo(btn.dataset.id));
+  });
+}
+
+function buildTodoDictionary(items) {
+  const texts = new Set();
+  for (const item of items) {
+    if (item.isTodo && item.text) {
+      texts.add(item.text);
+    }
+  }
+  todoDictionary = Array.from(texts);
+}
+
+function hideSuggestions() {
+  elements.todoSuggestions.classList.add('hidden');
+  elements.todoSuggestions.innerHTML = '';
+}
+
+function renderSuggestions(matches) {
+  elements.todoSuggestions.innerHTML = '';
+
+  if (!matches.length) {
+    hideSuggestions();
+    return;
+  }
+
+  for (const match of matches) {
+    const li = document.createElement('li');
+    li.textContent = match;
+    li.addEventListener('click', () => {
+      elements.todoInput.value = match;
+      hideSuggestions();
+      elements.todoInput.focus();
+    });
+    elements.todoSuggestions.appendChild(li);
+  }
+
+  elements.todoSuggestions.classList.remove('hidden');
+}
+
+async function fetchAllItems() {
+  const messagesQuery = query(
+    collection(db, 'neda_messages'),
+    //orderBy('timestamp', 'desc'),
+    limit(200)
+  );
+
+  const snapshot = await getDocs(messagesQuery);
+  const items = snapshot.docs.map((docSnap) => ({ id: docSnap.id, ...docSnap.data() }));
+  items.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+  return items;
 }
 
 async function refreshMessages() {
   try {
     console.log('Fetching messages from Firestore...');
-    const messagesQuery = query(
-      collection(db, 'neda_messages'),
-      //orderBy('timestamp', 'desc'),
-      limit(10)
-    );
+    const items = await fetchAllItems();
+    console.log('Successfully loaded', items.length, 'messages');
 
-    const snapshot = await getDocs(messagesQuery);
-    console.log('Successfully loaded', snapshot.docs.length, 'messages');
-    const messages = snapshot.docs.map((docSnap) => ({ id: docSnap.id, ...docSnap.data() }));
-    renderMessages(messages);
+    buildTodoDictionary(items);
+
+    const plain = items.filter((item) => !item.isTodo).slice(0, 10);
+    const todos = items.filter((item) => item.isTodo && (showCompleted || !item.isComplete));
+    const combined = [...plain, ...todos].sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+
+    renderMessages(combined);
   } catch (error) {
     console.error('Failed to load messages:', error);
     console.error('Error code:', error.code);
@@ -147,7 +221,7 @@ async function refreshMessages() {
   }
 }
 
-async function sendMessage(text) {
+async function sendMessage(text, extra = {}) {
   const deviceId = getOrCreateDeviceId();
   const name = getName();
   console.log(`Attempting to send message from device ${deviceId} with name ${name}: "${text}"`);
@@ -166,7 +240,11 @@ async function sendMessage(text) {
       timestamp: new Date().toISOString(),
       deviceId,
       name,
-      text
+      text,
+      isTodo: false,
+      isComplete: false,
+      completedAt: null,
+      ...extra
     });
     console.log('after try');
 
@@ -183,16 +261,10 @@ async function sendMessage(text) {
 
 async function maybeClearMessages() {
   try {
-    const messagesQuery = query(
-      collection(db, 'neda_messages'),
-      //orderBy('timestamp', 'desc'),
-      limit(10)
-    );
+    const items = await fetchAllItems();
+    const last10 = items.slice(0, 10);
 
-    const snapshot = await getDocs(messagesQuery);
-    const items = snapshot.docs.map((docSnap) => ({ id: docSnap.id, ...docSnap.data() }));
-
-    const eraseItems = items.filter((item) => /ERASE/i.test(String(item.text || '')));
+    const eraseItems = last10.filter((item) => /ERASE/i.test(String(item.text || '')));
     const uniqueDeviceIds = new Set(eraseItems.map((item) => item.deviceId));
 
     const shouldClear = eraseItems.length >= 2 && uniqueDeviceIds.size >= 2;
@@ -208,6 +280,48 @@ async function maybeClearMessages() {
   } catch (error) {
     console.error('Erase check failed:', error);
     setStatus('Erase logic failed. Check your Firestore setup.', 'error');
+  }
+}
+
+async function toggleTodo(itemId) {
+  try {
+    const items = await fetchAllItems();
+    const item = items.find((i) => i.id === itemId);
+    if (!item) {
+      return;
+    }
+
+    if (!item.isComplete) {
+      await updateDoc(doc(db, 'neda_messages', itemId), {
+        isComplete: true,
+        completedAt: new Date().toISOString()
+      });
+    } else {
+      const createdDay = item.timestamp ? new Date(item.timestamp).toDateString() : null;
+      const completedDay = item.completedAt ? new Date(item.completedAt).toDateString() : null;
+
+      if (createdDay && completedDay && createdDay === completedDay) {
+        await updateDoc(doc(db, 'neda_messages', itemId), {
+          isComplete: false,
+          completedAt: null
+        });
+      } else {
+        await addDoc(collection(db, 'neda_messages'), {
+          timestamp: new Date().toISOString(),
+          deviceId: getOrCreateDeviceId(),
+          name: getName(),
+          text: item.text,
+          isTodo: true,
+          isComplete: false,
+          completedAt: null
+        });
+      }
+    }
+
+    await refreshMessages();
+  } catch (error) {
+    console.error('Toggle todo failed:', error);
+    setStatus('Failed to update todo item.', 'error');
   }
 }
 
@@ -248,6 +362,36 @@ function initializeUI() {
   elements.eraseBtn.addEventListener('click', async () => {
     const name = getName();
     await sendMessage(`${name} wants to ERASE`);
+  });
+
+  elements.trebamBtn.addEventListener('click', async () => {
+    const text = elements.todoInput.value.trim();
+    if (!text) {
+      setStatus('Enter a todo item before tapping Trebam.', 'error');
+      return;
+    }
+
+    await sendMessage(text, { isTodo: true, isComplete: false, completedAt: null });
+    elements.todoInput.value = '';
+    hideSuggestions();
+  });
+
+  elements.todoInput.addEventListener('input', () => {
+    const value = elements.todoInput.value.trim().toLowerCase();
+    if (value.length < 2) {
+      hideSuggestions();
+      return;
+    }
+
+    const matches = todoDictionary.filter((text) => text.toLowerCase().includes(value));
+    renderSuggestions(matches);
+  });
+
+  elements.filterToggle.addEventListener('click', async () => {
+    showCompleted = !showCompleted;
+    elements.filterToggle.classList.toggle('active', showCompleted);
+    elements.filterToggle.setAttribute('aria-pressed', String(showCompleted));
+    await refreshMessages();
   });
 }
 

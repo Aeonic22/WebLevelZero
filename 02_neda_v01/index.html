@@ -10,7 +10,10 @@
     <main class="app-shell">
       <header class="topbar">
         <h1>Neda</h1>
-        <button id="settingsToggle" class="secondary" type="button">Settings</button>
+        <div class="header-actions">
+          <button id="filterToggle" class="icon-btn" type="button" title="Show/hide completed items" aria-pressed="false">&#10003;</button>
+          <button id="settingsToggle" class="secondary" type="button">Settings</button>
+        </div>
       </header>
 
       <section id="settingsPanel" class="card hidden">
@@ -30,8 +33,13 @@
       </section>
 
       <section class="card controls">
+        <div class="todo-compose">
+          <input id="todoInput" type="text" maxlength="140" placeholder="Trebam... (type a todo item)" autocomplete="off" />
+          <ul id="todoSuggestions" class="suggestions-list hidden"></ul>
+        </div>
         <div class="button-row">
           <button id="helloBtn" class="primary" type="button">Hello</button>
+          <button id="trebamBtn" class="primary" type="button">Trebam</button>
           <button id="eraseBtn" class="danger" type="button">Erase</button>
         </div>
       </section>
