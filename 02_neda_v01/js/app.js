@@ -430,7 +430,13 @@ async function startApp() {
     console.log('Starting app initialization...');
     console.log('Auth object:', auth);
     console.log('Database:', db);
-    
+
+    if (navigator.storage?.persist) {
+      navigator.storage.persist().then((granted) => {
+        console.log('Persistent storage granted:', granted);
+      });
+    }
+
     // Try to sign in anonymously
     signInAnonymously(auth).then(userCred => {
       console.log('✓ Anonymous sign in successful:', userCred.user.uid);

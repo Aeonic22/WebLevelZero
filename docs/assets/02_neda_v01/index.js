@@ -365,11 +365,17 @@ function initializeUI() {
   });
 }
 async function startApp() {
+  var _a;
   try {
     setStatus("Initializing...", "");
     console.log("Starting app initialization...");
     console.log("Auth object:", auth);
     console.log("Database:", db);
+    if ((_a = navigator.storage) == null ? void 0 : _a.persist) {
+      navigator.storage.persist().then((granted) => {
+        console.log("Persistent storage granted:", granted);
+      });
+    }
     signInAnonymously(auth).then((userCred) => {
       console.log("✓ Anonymous sign in successful:", userCred.user.uid);
       setStatus("Connected", "success");
