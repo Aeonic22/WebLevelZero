@@ -8,13 +8,24 @@ const buildIdFile = resolve(__dirname, '.build-id');
 
 function buildIdPlugin() {
   let buildId = '0';
+  let isBuild = false;
 
   return {
     name: 'build-id',
+    configResolved(config) {
+      isBuild = config.command === 'build';
+    },
     buildStart() {
       const current = existsSync(buildIdFile) ? parseInt(readFileSync(buildIdFile, 'utf-8'), 10) || 0 : 0;
-      buildId = String(current + 1);
-      writeFileSync(buildIdFile, buildId);
+      // Only advance the persisted counter on a real `vite build` — `vite dev`
+      // also triggers buildStart, and bumping it there desyncs the counter
+      // from what's actually committed in docs/.
+      if (isBuild) {
+        buildId = String(current + 1);
+        writeFileSync(buildIdFile, buildId);
+      } else {
+        buildId = String(current);
+      }
     },
     transformIndexHtml(html) {
       return html.replace(/(<p id="buildId">Build: )([^<]*)(<\/p>)/, `$1${buildId}$3`);
