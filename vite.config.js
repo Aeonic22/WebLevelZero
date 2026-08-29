@@ -5,6 +5,7 @@ export default defineConfig({
   build: {
     outDir: 'docs',
     emptyOutDir: true,
+    minify: false,
     rollupOptions: {
       input: {
         main: 'index.html',
