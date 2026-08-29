@@ -1,3 +1,5 @@
+const CACHE_NAME = 'weblevelzero-v2'; // bump this to force clients onto a fresh cache
+
 const APP_SHELL = [
   '/WebLevelZero/',
   '/WebLevelZero/manifest.json',
@@ -7,13 +9,19 @@ const APP_SHELL = [
 
 self.addEventListener('install', (event) => {
   event.waitUntil(
-    caches.open('weblevelzero-v1').then((cache) => cache.addAll(APP_SHELL))
+    caches.open(CACHE_NAME).then((cache) => cache.addAll(APP_SHELL))
   );
   self.skipWaiting();
 });
 
 self.addEventListener('activate', (event) => {
-  event.waitUntil(self.clients.claim());
+  event.waitUntil(
+    caches.keys()
+      .then((names) => Promise.all(
+        names.filter((name) => name !== CACHE_NAME).map((name) => caches.delete(name))
+      ))
+      .then(() => self.clients.claim())
+  );
 });
 
 self.addEventListener('fetch', (event) => {
@@ -21,13 +29,37 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
+  const isHTML = event.request.mode === 'navigate' ||
+    event.request.headers.get('accept')?.includes('text/html');
+
+  if (isHTML) {
+    // Network-first for HTML so a fresh deploy is picked up immediately;
+    // fall back to cache only when offline, since cached hashed assets
+    // referenced by a stale HTML shell may no longer exist.
+    event.respondWith(
+      fetch(event.request)
+        .then((response) => {
+          const clone = response.clone();
+          caches.open(CACHE_NAME).then((cache) => cache.put(event.request, clone));
+          return response;
+        })
+        .catch(() => caches.match(event.request).then((cached) => cached || caches.match('/WebLevelZero/')))
+    );
+    return;
+  }
+
+  // Cache-first for hashed/static assets: they're immutable per URL.
   event.respondWith(
     caches.match(event.request).then((cached) => {
       if (cached) {
         return cached;
       }
 
-      return fetch(event.request).catch(() => caches.match('/WebLevelZero/'));
+      return fetch(event.request).then((response) => {
+        const clone = response.clone();
+        caches.open(CACHE_NAME).then((cache) => cache.put(event.request, clone));
+        return response;
+      });
     })
   );
 });

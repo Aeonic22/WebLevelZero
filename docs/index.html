@@ -24,5 +24,22 @@
         </ul>
       </nav>
     </main>
+
+    <script>
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('/WebLevelZero/sw.js');
+        });
+
+        // Reload once when a new service worker takes control, so an
+        // update applies immediately instead of waiting for a manual refresh.
+        let refreshing = false;
+        navigator.serviceWorker.addEventListener('controllerchange', () => {
+          if (refreshing) return;
+          refreshing = true;
+          window.location.reload();
+        });
+      }
+    </script>
   </body>
 </html>
