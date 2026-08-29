@@ -3,7 +3,7 @@ import { defineConfig } from 'vite';
 export default defineConfig({
   base: '/WebLevelZero/',
   build: {
-    outDir: 'dist',
+    outDir: 'docs',
     emptyOutDir: true,
     rollupOptions: {
       input: {

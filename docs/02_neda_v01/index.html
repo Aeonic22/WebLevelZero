@@ -3,29 +3,44 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Neda</title>
-    <script type="module" crossorigin src="/WebLevelZero/assets/02_neda_v01/index-Bjo9L74l.js"></script>
-    <link rel="stylesheet" crossorigin href="/WebLevelZero/assets/index-b8PuAQPo.css">
+    <title>Neda</title>
+    <script type="module" crossorigin src="/WebLevelZero/assets/02_neda_v01/index-DVOfkzDE.js"></script>
+    <link rel="stylesheet" crossorigin href="/WebLevelZero/assets/index-DIl0wZwj.css">
   </head>
   <body>
     <main class="app-shell">
       <header class="topbar">
         <h1>Neda</h1>
-        <button id="settingsToggle" class="secondary" type="button">Settings</button>
+        <div class="header-actions">
+          <button id="filterToggle" class="icon-btn" type="button" title="Show/hide completed items" aria-pressed="false">&#10003;</button>
+          <button id="settingsToggle" class="secondary" type="button">Settings</button>
+        </div>
       </header>
 
       <section id="settingsPanel" class="card hidden">
         <label for="nameInput">Your name</label>
         <div class="settings-row">
           <input id="nameInput" type="text" maxlength="40" placeholder="Enter your name" />
-          <button id="deviceIdBtn" type="button" class="secondary">Device ID</button>
           <button id="saveName" type="button">Save</button>
+        </div>
+
+        <div class="device-row">
+          <label for="deviceIdDisplay">Device ID</label>
+          <div class="settings-row device-box">
+            <input id="deviceIdDisplay" type="text" readonly value="" aria-label="Device ID" />
+            <button id="deviceIdBtn" type="button" class="secondary">Copy</button>
+          </div>
         </div>
       </section>
 
       <section class="card controls">
+        <div class="todo-compose">
+          <input id="todoInput" type="text" maxlength="140" placeholder="Trebam... (type a todo item)" autocomplete="off" />
+          <ul id="todoSuggestions" class="suggestions-list hidden"></ul>
+        </div>
         <div class="button-row">
           <button id="helloBtn" class="primary" type="button">Hello</button>
+          <button id="trebamBtn" class="primary" type="button">Trebam</button>
           <button id="eraseBtn" class="danger" type="button">Erase</button>
         </div>
       </section>
@@ -37,6 +52,6 @@
 
       <p id="statusMessage" class="status-message" aria-live="polite"></p>
     </main>
-
+
   </body>
 </html>
