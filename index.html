@@ -27,6 +27,15 @@
     </main>
 
     <script>
+      fetch('/WebLevelZero/build-id.txt')
+        .then((response) => (response.ok ? response.text() : null))
+        .then((id) => {
+          if (id) {
+            document.getElementById('buildId').textContent = `Build: ${id.trim()}`;
+          }
+        })
+        .catch(() => {});
+
       if ('serviceWorker' in navigator) {
         window.addEventListener('load', () => {
           navigator.serviceWorker.register('/WebLevelZero/sw.js');

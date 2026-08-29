@@ -31,11 +31,12 @@ self.addEventListener('fetch', (event) => {
 
   const isHTML = event.request.mode === 'navigate' ||
     event.request.headers.get('accept')?.includes('text/html');
+  const isBuildId = event.request.url.endsWith('/build-id.txt');
 
-  if (isHTML) {
-    // Network-first for HTML so a fresh deploy is picked up immediately;
-    // fall back to cache only when offline, since cached hashed assets
-    // referenced by a stale HTML shell may no longer exist.
+  if (isHTML || isBuildId) {
+    // Network-first: for HTML so a fresh deploy is picked up immediately
+    // (cached hashed assets referenced by a stale shell may no longer
+    // exist), and for build-id.txt so it never reports a stale build.
     event.respondWith(
       fetch(event.request)
         .then((response) => {

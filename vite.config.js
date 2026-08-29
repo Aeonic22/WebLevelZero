@@ -5,6 +5,7 @@ import { dirname, resolve } from 'node:path';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const buildIdFile = resolve(__dirname, '.build-id');
+const outDir = resolve(__dirname, 'docs');
 
 function buildIdPlugin() {
   let buildId = '0';
@@ -27,8 +28,12 @@ function buildIdPlugin() {
         buildId = String(current);
       }
     },
-    transformIndexHtml(html) {
-      return html.replace(/(<p id="buildId">Build: )([^<]*)(<\/p>)/, `$1${buildId}$3`);
+    closeBundle() {
+      // Written straight into outDir instead of via transformIndexHtml, so
+      // index.html itself never changes between builds — only this file does.
+      if (isBuild) {
+        writeFileSync(resolve(outDir, 'build-id.txt'), buildId);
+      }
     }
   };
 }
