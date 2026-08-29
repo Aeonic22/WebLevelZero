@@ -70,6 +70,14 @@ function getName() {
   return localStorage.getItem(STORAGE_KEYS.name) || 'Guest';
 }
 
+function computeInitials(text) {
+  const words = text.trim().split(/\s+/).filter(Boolean);
+  if (words.length <= 1) {
+    return '';
+  }
+  return words.map((word) => word[0].toLowerCase()).join('');
+}
+
 async function updateDeviceIdDisplay() {
   if (!elements.deviceIdDisplay) {
     return;
@@ -152,13 +160,16 @@ function renderMessages(messages) {
 }
 
 function buildTodoDictionary(items) {
-  const texts = new Set();
+  const byText = new Map();
   for (const item of items) {
-    if (item.isTodo && item.text) {
-      texts.add(item.text);
+    if (item.isTodo && item.text && !byText.has(item.text)) {
+      byText.set(item.text, {
+        text: item.text,
+        initials: (item.initials || '').toLowerCase()
+      });
     }
   }
-  todoDictionary = Array.from(texts);
+  todoDictionary = Array.from(byText.values());
 }
 
 function hideSuggestions() {
@@ -242,6 +253,7 @@ async function sendMessage(text, extra = {}) {
       deviceId,
       name,
       text,
+      initials: computeInitials(text),
       isTodo: false,
       isComplete: false,
       completedAt: null,
@@ -384,7 +396,23 @@ function initializeUI() {
       return;
     }
 
-    const matches = todoDictionary.filter((text) => text.toLowerCase().includes(value));
+    const textMatches = todoDictionary
+      .filter((item) => item.text.toLowerCase().includes(value))
+      .sort((a, b) => a.text.toLowerCase().indexOf(value) - b.text.toLowerCase().indexOf(value));
+
+    const initialsMatches = todoDictionary
+      .filter((item) => item.initials && item.initials.includes(value))
+      .sort((a, b) => a.initials.indexOf(value) - b.initials.indexOf(value));
+
+    const seen = new Set();
+    const matches = [];
+    for (const item of [...textMatches, ...initialsMatches]) {
+      if (!seen.has(item.text)) {
+        seen.add(item.text);
+        matches.push(item.text);
+      }
+    }
+
     renderSuggestions(matches);
   });
 
