@@ -119,12 +119,12 @@ Allowed devices collection/table fields should include at least:
 - [x] Confirm that testing will begin on one laptop
 - [x] Decide on a backend option and architecture
 - [x] Decide that allowedDevices will be managed manually
-- [ ] Create a simple project folder and decide on a static frontend structure
-- [ ] Create a minimal backend API or database rules that support create/read operations
-- [ ] Register authorized devices manually
-- [ ] Build the client UI for messages, name settings, and refresh behavior
-- [ ] Implement erase logic requiring 2 consecutive erase messages from at least 2 users/devices
-- [ ] Validate the full workflow on a laptop/browser first
+- [x] Create a simple project folder and decide on a static frontend structure
+- [x] Create a minimal backend API or database rules that support create/read operations
+- [x] Register authorized devices manually
+- [x] Build the client UI for messages, name settings, and refresh behavior
+- [x] Implement erase logic requiring 2 consecutive erase messages from at least 2 users/devices
+- [x] Validate the full workflow on a laptop/browser first
 
 ### Minimum technical prerequisites
 
@@ -141,7 +141,7 @@ Allowed devices collection/table fields should include at least:
 - [ ] Should the backend be configured and tested directly through API calls rather than only through the browser UI?
 - [ ] Is the family use case broad enough to require multiple devices and multiple names, or a single shared family identity?
 - [x] Device registration will be handled manually for the prototype
-- [ ] Which online database provider will be used if Firebase is not chosen?
+- [x] Which online database provider will be used if Firebase is not chosen?
 
 ---
 
@@ -204,9 +204,9 @@ For this project, the best practical alternatives are:
 
 ### Recommended implementation path
 
-- [ ] Confirm whether testing will be done from one PC or multiple devices/browsers
-- [ ] Choose a backend option: Firebase or another free online database service
-- [ ] Create a simple project folder and decide on a static frontend structure
+- [x] Confirm whether testing will be done from one PC or multiple devices/browsers
+- [x] Choose a backend option: Firebase or another free online database service
+- [x] Create a simple project folder and decide on a static frontend structure
 - [ ] Create a minimal backend API or database rules that support create/read operations
 - [ ] Register authorized devices or keys
 - [ ] Build the client UI for messages, name settings, and refresh behavior
