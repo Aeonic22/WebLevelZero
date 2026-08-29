@@ -31,6 +31,7 @@ const elements = {
   nameInput: document.getElementById('nameInput'),
   saveName: document.getElementById('saveName'),
   deviceIdBtn: document.getElementById('deviceIdBtn'),
+  deviceIdDisplay: document.getElementById('deviceIdDisplay'),
   helloBtn: document.getElementById('helloBtn'),
   trebamBtn: document.getElementById('trebamBtn'),
   eraseBtn: document.getElementById('eraseBtn'),
