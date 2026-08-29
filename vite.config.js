@@ -2,6 +2,7 @@ import { defineConfig } from 'vite';
 import { existsSync, readFileSync, writeFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { dirname, resolve } from 'node:path';
+import { transform } from 'esbuild';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const buildIdFile = resolve(__dirname, '.build-id');
@@ -38,9 +39,20 @@ function buildIdPlugin() {
   };
 }
 
+function minifyVendorPlugin() {
+  return {
+    name: 'minify-vendor',
+    async renderChunk(code, chunk) {
+      if (chunk.name !== 'vendor') return null;
+      const result = await transform(code, { minify: true });
+      return { code: result.code, map: result.map || null };
+    }
+  };
+}
+
 export default defineConfig({
   base: '/WebLevelZero/',
-  plugins: [buildIdPlugin()],
+  plugins: [buildIdPlugin(), minifyVendorPlugin()],
   build: {
     outDir: 'docs',
     emptyOutDir: true,
@@ -55,6 +67,14 @@ export default defineConfig({
         '00_miniApps/pages/tic-tac-toe/index': '00_miniApps/pages/tic-tac-toe/index.html',
         '01_cssPlayground/index': '01_cssPlayground/index.html',
         '02_neda_v01/index': '02_neda_v01/index.html'
+      },
+      output: {
+        entryFileNames: 'assets/[name].js',
+        chunkFileNames: 'assets/[name].js',
+        assetFileNames: 'assets/[name][extname]',
+        manualChunks(id) {
+          if (id.includes('node_modules')) return 'vendor';
+        }
       }
     }
   }
