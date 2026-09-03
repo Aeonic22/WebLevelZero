@@ -6,6 +6,17 @@ Neda is a very simple family-oriented prototype application. It allows a user to
 
 The application is intentionally minimal and should remain easy to understand and easy to maintain.
 
+### 1.1 How this document evolves
+
+This is a living spec for an actively developed prototype — features get added over time rather than fully planned upfront. When adding a new feature, follow these conventions so the doc stays easy to extend without reshuffling what's already shipped:
+
+- **Core user flows (§3)** are grouped in "decades" by iteration: 3.1–3.9 hold the original core flows (hello/erase/view). Each later iteration claims the next open decade (3.10–3.19, 3.20–3.29, ...) for its cluster of related flows, so a reader can tell at a glance which flows shipped together. Numbers are never reused or renumbered once shipped.
+- **UI elements (§2)** and **acceptance criteria (§7)** are appended in the order features were implemented, not re-sorted alphabetically or logically — the newest entry is the most recently shipped feature.
+- **Data requirements (§5)** gain new fields as features need them; existing fields are not renamed or removed for a prototype like this.
+- Every iteration is logged in **§11 Revision history**, recording what shipped and which sections it touched, so the connection between a feature and its scattered footprint (UI + flow + data + acceptance criteria) stays traceable.
+
+Going forward, a new feature just needs: a new flow decade in §3, appended UI/criteria entries, new fields in §5, and one new block in §11 — no renumbering of existing content.
+
 ---
 
 ## 2. User interface
@@ -32,11 +43,6 @@ The mobile-first UI should contain only a few essential elements:
 - The 10-item display limit applies only to plain messages/history. When the filter is set to "show all", uncompleted todo items are always shown in full regardless of the 10-item cap
 - Below the text input, an autocomplete suggestion list appears once the user has typed at least 2 characters, listing matching known todo items (see 3.13)
 
-### 2.4 Filter toggle button
-
-- Toggles between "show all items" and "show only uncompleted todo items"
-- Icon is a checkmark, shown in gray when completed items are hidden and green when completed items are shown, using image tinting rather than swapped image assets
-
 ### 2.3 Settings screen
 
 The settings screen should allow the user to:
@@ -46,6 +52,11 @@ The settings screen should allow the user to:
 - cancel and return without saving
 
 The UI should remain minimal and avoid extra settings.
+
+### 2.4 Filter toggle button (added with the todo feature, see 3.10–3.13)
+
+- Toggles between "show all items" and "show only uncompleted todo items"
+- Icon is a checkmark, shown in gray when completed items are hidden and green when completed items are shown, using image tinting rather than swapped image assets
 
 ---
 
@@ -86,6 +97,8 @@ Example payload:
 ### 3.3 View activity
 
 The application should always show what the system currently knows about recent family messages. The user should see a short stream of recent activity, not a large or complex dashboard.
+
+*Flows 3.10–3.13 below were added together in a later iteration to introduce the todo feature (see §11 Revision history). Per the numbering convention in §1.1, they were given their own decade rather than continuing from 3.4.*
 
 ### 3.10 Add todo item
 
@@ -155,8 +168,7 @@ Minimum fields:
 - isComplete (bool) — only meaningful when isTodo is true
 - completedAt (timestamp, nullable) — set when isComplete becomes true; behavior on uncomplete is an open question (see 8)
 
-<!-- what are thosefor? -->
-Optional fields:
+Optional fields (purpose not yet settled, see §8):
 
 - created_at
 - source
@@ -199,20 +211,27 @@ All Neda data collections must use the `neda_` prefix to distinguish them from o
 
 ## 7. Acceptance criteria
 
-- [ ] The app runs in the browser on mobile and is easy to open from the home screen
-- [ ] A user may enter a name and save it
-- [ ] The display name appears in message entries
-- [ ] A user may send a hello message
-- [ ] The system stores the message in the backend
-- [ ] The app displays the most recent messages
-- [ ] A user may send an erase message
-- [ ] The backend clears stored messages when the erase condition is triggered
-- [ ] Only approved devices are allowed to post messages
-- [ ] The erase rule requires at least 2 consecutive erase messages from at least 2 different users/devices
-- [ ] A user may send a todo item via the “Trebam” button
-- [ ] Todo items display a checkmark and can be completed/uncompleted by any user
-- [ ] The filter toggle shows/hides completed todo items without affecting the 10-item cap on plain messages, and without ever hiding uncompleted todos
-- [ ] After typing 2+ characters, the app shows matching known todo items as autocomplete suggestions
+### 7.1 Iteration 1 — core (hello/erase)
+
+- [x] The app runs in the browser on mobile and is easy to open from the home screen
+- [x] A user may enter a name and save it
+- [x] The display name appears in message entries
+- [x] A user may send a hello message
+- [x] The system stores the message in the backend
+- [x] The app displays the most recent messages
+- [x] A user may send an erase message
+- [x] The backend clears stored messages when the erase condition is triggered
+- [x] Only approved devices are allowed to post messages
+- [x] The erase rule requires at least 2 consecutive erase messages from at least 2 different users/devices
+
+### 7.2 Iteration 2 — todo feature (3.10–3.13)
+
+- [x] A user may send a todo item via the “Trebam” button
+- [x] Todo items display a checkmark and can be completed/uncompleted by any user
+- [x] The filter toggle shows/hides completed todo items without affecting the 10-item cap on plain messages, and without ever hiding uncompleted todos
+- [x] After typing 2+ characters, the app shows matching known todo items as autocomplete suggestions
+
+New iterations append a new `7.N` block here rather than inserting into the lists above.
 
 ---
 
@@ -250,3 +269,30 @@ If Firebase is not chosen, the strongest alternatives are:
 - Render or Railway with Postgres
 
 Supabase is the most natural alternative because it is online, beginner-friendly, and offers a simple database model with minimal complexity. It is a strong option if the goal is to keep the backend online but avoid Firebase.
+
+---
+
+## 11. Revision history
+
+Tracks which sections each iteration touched, per the convention in §1.1. Add a new entry here whenever a feature ships — don't edit past entries.
+
+### Iteration 1 — core (hello / erase / view)
+
+- Flows: 3.1 Send hello, 3.2 Send erase, 3.3 View activity
+- UI: 2.1 Main screen, 2.2 Message list (base), 2.3 Settings screen
+- Data: `neda_messages` base fields, `neda_allowedDevices`
+- Acceptance criteria: 7.1
+
+### Iteration 2 — todo feature
+
+- Flows: 3.10 Add todo item, 3.11 Complete/uncomplete todo item, 3.12 Toggle completed-items filter, 3.13 Todo text autocomplete
+- UI: 2.4 Filter toggle button; message list and settings sections updated in place for todo display
+- Data: `neda_messages` gained `isTodo`, `isComplete`, `completedAt`
+- Acceptance criteria: 7.2
+
+### Iteration 3 — (next feature goes here)
+
+- Flows: 3.20–3.2x reserved for the next feature cluster
+- UI: append to §2
+- Data: append new fields to §5.1/§5.2 as needed
+- Acceptance criteria: new 7.3 block
